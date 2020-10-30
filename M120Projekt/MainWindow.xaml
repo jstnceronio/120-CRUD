@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:M120Projekt"
         mc:Ignorable="d"
-        Height="251.75" Width="675.5" Loaded="Window_Loaded">
-    <Canvas Background="#FFECF0F1" Margin="0,0,-47.5,0">
+        Height="251.75" Width="561.5" Loaded="Window_Loaded">
+    <Canvas Background="#FFECF0F1" Margin="0,0,0.5,0">
 
-        <Grid Height="Auto" Canvas.Left="14" Canvas.Top="21" Width="360">
+        <Grid Height="Auto" Canvas.Left="2" Canvas.Top="22" Width="260">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="46*" />
                 <ColumnDefinition Width="49*" />
@@ -26,40 +26,49 @@
             </Grid.RowDefinitions>
 
             <Label x:Name="lblName" Grid.Column="0" Grid.Row ="0" FontWeight="Bold" Content="Name" FontSize="15" Foreground="#FF34495E" Margin="0,-10,0.5,10"/>
-            <TextBox Grid.Column="1" Grid.Row ="0" x:Name="txtName" BorderBrush="#FF34495E" TextChanged="txtName_TextChanged"/>
+            <TextBox Grid.Row ="0" x:Name="txtName" BorderBrush="#FF34495E" TextChanged="txtName_TextChanged" TabIndex="1" Margin="4,-2,0,2" Grid.Column="1"/>
 
             <Label x:Name="lblPreis" Grid.Column="0" Grid.Row ="2" FontWeight="Bold" Content="Preis" FontSize="15" Foreground="#FF34495E"/>
-            <TextBox Grid.Column="1" Grid.Row ="2" x:Name="txtPreis" BorderBrush="#FF34495E" TextChanged="txtPreis_TextChanged"/>
+            <TextBox Grid.Row ="2" x:Name="txtPreis" BorderBrush="#FF34495E" TextChanged="txtPreis_TextChanged" TabIndex="2" Margin="4,0,0,0" Grid.Column="1"/>
 
             <Label x:Name="lblErhaeltlich" Grid.Column="0" Grid.Row ="4" FontWeight="Bold" Content="Erhältlich" FontSize="15" Foreground="#FF34495E"/>
-            <CheckBox x:Name="cbErhaeltlich" Grid.Column="1" Grid.Row ="4" Margin="0,8,0,0" IsChecked="True"/>
+            <CheckBox x:Name="cbErhaeltlich" Grid.Row ="4" Margin="4,7,8,1" IsChecked="True" TabIndex="3" Grid.Column="1"/>
 
             <Label x:Name="lblDatum" Grid.Column="0" Grid.Row ="6" FontWeight="Bold" Content="Datum" FontSize="15" Foreground="#FF34495E"/>
 
             <Label x:Name="lblFarbe" Grid.Column="0" Grid.Row ="8" FontWeight="Bold" Content="Farbe" FontSize="15" Foreground="#FF34495E"/>
-            <DatePicker x:Name="dtDatum" Grid.Column="1" HorizontalAlignment="Left" Margin="0,4,0,0" Grid.Row="6" VerticalAlignment="Top"/>
-            
-            <ComboBox x:Name="cboxFarbe" Grid.Column="1" HorizontalAlignment="Left" Margin="0,7,0,0" Grid.Row="8" VerticalAlignment="Top" Width="120">
+            <DatePicker x:Name="dtDatum" HorizontalAlignment="Left" Margin="6,7,0,0" Grid.Row="6" VerticalAlignment="Top" TabIndex="4" Width="128" Grid.Column="1" Height="28"/>
+
+            <ComboBox x:Name="cboxFarbe" HorizontalAlignment="Left" Margin="6,5,0,0" Grid.Row="8" VerticalAlignment="Top" Width="128" TabIndex="5" Grid.Column="1">
                 <ComboBoxItem Foreground="Red">Rot</ComboBoxItem>
                 <ComboBoxItem Foreground="Green">Grün</ComboBoxItem>
                 <ComboBoxItem Foreground="Blue">Blau</ComboBoxItem>
             </ComboBox>
 
         </Grid>
-        <WrapPanel Height="32" Canvas.Left="14" Canvas.Top="209" Width="360">
-            <Button Name="btnSave" Width="100" Height="30" BorderBrush="White" Foreground="White" Background="#FFF1C40F" FontWeight="Bold" Click="btnSave_Click">
-                <AccessText>_SAVE</AccessText>
+        <WrapPanel Height="32" Canvas.Left="2" Canvas.Top="210" Width="260">
+            <Button Name="btnSave" Width="72" Height="25" BorderBrush="White" Foreground="White" Background="#FFF1C40F" FontWeight="Bold" Click="btnSave_Click" TabIndex="6">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="imgSave" Height="15" Source="db_add.ico"></Image>
+                    <TextBlock x:Name="txtSave" Text="SAVE" Margin="5,0,0,0"></TextBlock>
+                </StackPanel>
             </Button>
-            <Button Name="btnDelete" Width="100" Margin="30,0" BorderBrush="White" Foreground="White" Background="#FFE74C3C" FontWeight="Bold" Click="btnDelete_Click">
-                <AccessText>_DELETE</AccessText>
+            <Button Name="btnDelete" Width="72" Margin="15,0" BorderBrush="White" Foreground="White" Background="#FFE74C3C" FontWeight="Bold" Click="btnDelete_Click" TabIndex="7" Height="25">
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="15" Source="db_remove.ico"></Image>
+                    <TextBlock x:Name="txtDelete" Text="DELETE" Margin="5,0,0,0"></TextBlock>
+                </StackPanel>
             </Button>
-            <Button Name="btnCancel" Width="100" BorderBrush="White" Foreground="White" Background="#FFE67E22" FontWeight="Bold" BorderThickness="0,1,1,1" Click="btnCancel_Click">
-                <AccessText>_CANCEL</AccessText>
+            <Button Name="btnCancel" Width="72" BorderBrush="White" Foreground="White" Background="#FFE67E22" FontWeight="Bold" BorderThickness="0,1,1,1" Click="btnCancel_Click" TabIndex="8" Height="25">
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="15" Source="dialog-cancel.ico"></Image>
+                    <TextBlock x:Name="txtDCancel" Text="CANCEL" Margin="5,0,0,0"></TextBlock>
+                </StackPanel>
             </Button>
         </WrapPanel>
-        <DataGrid x:Name="dgvProdukte" AutoGenerateColumns="False" Height="220" Canvas.Left="379" Canvas.Top="21" Width="324" IsReadOnly="True" MouseDoubleClick="dgvProdukte_MouseDoubleClick">
+        <DataGrid x:Name="dgvProdukte" AutoGenerateColumns="False" Height="220" Canvas.Left="267" Canvas.Top="22" Width="285" IsReadOnly="True" MouseDoubleClick="dgvProdukte_MouseDoubleClick" KeyDown="dgvProdukte_KeyDown" PreviewKeyDown="dgvProdukte_PreviewKeyDown">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Produkt ID" Binding="{Binding ProduktId}" Width="auto"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding ProduktId}" Width="auto"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="auto"/>
                 <DataGridTextColumn Header="Preis" Binding="{Binding Preis}" Width="auto"/>
                 <DataGridTemplateColumn Header="Erhätlich" Width="auto">

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace M120Projekt
@@ -43,6 +44,13 @@ namespace M120Projekt
         {
             // Manage states
             checkStates();
+            // Set state to new if fields are empty
+            if (string.IsNullOrWhiteSpace(txtName.Text) & string.IsNullOrWhiteSpace(txtPreis.Text))
+            {
+                state = Zustand.Neu;
+            } 
+            
+            lblName.Content = state;
         }
 
         // Switch states and manage clickable buttons
@@ -74,7 +82,7 @@ namespace M120Projekt
         public void ClearAllFields()
         {
             // reset button text
-            btnSave.Content = "Save";
+            txtSave.Text = "SAVE";
             // reset state
             state = Zustand.Neu;
             // reset text
@@ -84,6 +92,7 @@ namespace M120Projekt
             // reset date
             dtDatum.SelectedDate = DateTime.Now;
             // reset color
+            cboxFarbe.SelectedIndex = -1;
             // Disable delete button
             btnDelete.IsEnabled = false;
             // Set ID to 0
@@ -190,38 +199,7 @@ namespace M120Projekt
 
         private void dgvProdukte_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var currentRowIndex = dgvProdukte.Items.IndexOf(dgvProdukte.CurrentItem);
-            string produktId;
-
-            Produkt selectedItem = dgvProdukte.SelectedItem as Produkt;
-
-            if (selectedItem != null)
-            {
-                produktId = Convert.ToString(selectedItem.ProduktId);
-            } else
-            {
-                produktId = "Nicht vorhanden";
-            }
-
-            // MAKE HEADER NOT CLICKABLE
-            
-            // model.ProduktId = Convert.ToInt32(dgvProdukte[1]);
-            // MessageBox.Show("Selected Item: " + produktId + "\n" + 
-            //    "Current Row Index: " + currentRowIndex.ToString());
-
-            model.ProduktId = Convert.ToInt32(produktId);
-
-            using (DBEntities db = new DBEntities())
-            {
-                model = db.Produkt.Where(x => x.ProduktId == model.ProduktId).FirstOrDefault();
-                txtName.Text = model.Name.Trim();
-                txtPreis.Text = Convert.ToString(model.Preis);
-                cbErhaeltlich.IsChecked = model.Verfuegbar;
-                cboxFarbe.Text = model.Farbe.Trim();
-                dtDatum.SelectedDate = model.Lieferdatum;
-            }
-            btnSave.Content = "Update";
-            btnDelete.IsEnabled = true;
+            editColumn();
         }
 
         private string GetCellinformation(int index)
@@ -246,6 +224,56 @@ namespace M120Projekt
                     ClearAllFields();
                     MessageBox.Show("Entry deleted!");
                 }
+            }
+        }
+
+        private void dgvProdukte_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                MessageBox.Show("Test");
+                editColumn();
+            }
+        }
+
+        private void editColumn()
+        {
+            var currentRowIndex = dgvProdukte.Items.IndexOf(dgvProdukte.CurrentItem);
+            string produktId;
+
+            Produkt selectedItem = dgvProdukte.SelectedItem as Produkt;
+
+            if (selectedItem != null)
+            {
+                produktId = Convert.ToString(selectedItem.ProduktId);
+            }
+            else
+            {
+                produktId = "Nicht vorhanden";
+            }
+
+            // MAKE HEADER NOT CLICKABLE
+
+            model.ProduktId = Convert.ToInt32(produktId);
+
+            using (DBEntities db = new DBEntities())
+            {
+                model = db.Produkt.Where(x => x.ProduktId == model.ProduktId).FirstOrDefault();
+                txtName.Text = model.Name.Trim();
+                txtPreis.Text = Convert.ToString(model.Preis);
+                cbErhaeltlich.IsChecked = model.Verfuegbar;
+                cboxFarbe.Text = model.Farbe.Trim();
+                dtDatum.SelectedDate = model.Lieferdatum;
+            }
+            txtSave.Text = "UPDATE";
+            btnDelete.IsEnabled = true;
+        }
+
+        private void dgvProdukte_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                editColumn();
             }
         }
     }
